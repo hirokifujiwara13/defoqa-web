@@ -21,9 +21,12 @@
                 <li><a href="#products">Products</a></li>
                 <li><a href="#ambassadors">Ambassadors</a></li>
                 <li><a href="#mission">Mission</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#cta">Contact</a></li>
                 <li><a href="jp.html">日本語</a></li>
             </ul>
+            <div class="mobile-lang-switch">
+                <a href="jp.html" class="mobile-lang-link">日本語</a>
+            </div>
         </nav>
     </header>
 
@@ -98,7 +101,7 @@
                         </div>
                         <div class="ambassador-info">
                             <h3>Professional Athletes</h3>
-                            <p>Our ambassadors include Miku Sunaga, who has played for Perth Glory, and Keiko Tanaka, who has represented Young Nadeshiko. Both are currently active players in NSW NPL, representing the highest levels of women's soccer in Australia and Japan.</p>
+                            <p>Our ambassadors include OO, who has played for Perth Glory, and OO, who has represented Young Nadeshiko. Both are currently active players in NSW NPL, representing the highest levels of women's soccer in Australia and Japan.</p>
                         </div>
                     </div>
                     
@@ -178,16 +181,53 @@
     </section>
 
     <!-- CTA Section -->
-    <section class="cta">
+    <section id="cta" class="cta">
         <div class="container">
             <h2>Take a Stand with DEFOQA</h2>
             <p>Join us in our mission to deliver quality soccer balls to players across Australia. Stand up for your passion.</p>
-            <a href="#contact" class="btn">Contact Us</a>
+            <a href="mailto:info@defoqa.com" class="btn">Contact Us</a>
+        </div>
+    </section>
+
+    <!-- Contact Form Section -->
+    <section id="contact" class="contact-section" style="display: none;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+            </div>
+            
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Get In Touch</h3>
+                    <p>We'd love to hear from you. Please feel free to reach out with any questions about our products or partnership opportunities.</p>
+                </div>
+                
+                <div class="contact-form-container">
+                    <form class="contact-form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Your name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" placeholder="Your message" rows="5" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer id="contact">
+    <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
@@ -200,16 +240,21 @@
                     <ul>
                         <li><a href="#about">About Us</a></li>
                         <li><a href="#products">Products</a></li>
+                        <li><a href="#ambassadors">Ambassadors</a></li>
                         <li><a href="#mission">Our Mission</a></li>
-                        <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-links">
                     <h3>Contact Us</h3>
                     <ul>
                         <li><i class="fas fa-envelope"></i> info@defoqa.com</li>
-                        <li><i class="fas fa-phone"></i> +61 2 1234 5678</li>
                         <li><i class="fas fa-map-marker-alt"></i> Sydney, Australia</li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h3>Follow</h3>
+                    <ul>
+                        <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
                     </ul>
                 </div>
             </div>
@@ -218,5 +263,25 @@
             </div>
         </div>
     </footer>
+    <!-- JavaScript for Contact Section -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactSection = document.getElementById('contact');
+            
+            // Update CTA Contact Us button to show contact section
+            const ctaContactButton = document.querySelector('.cta .btn');
+            if (ctaContactButton) {
+                ctaContactButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (contactSection) {
+                        // Show the contact section
+                        contactSection.style.display = 'block';
+                        // Scroll to the contact section
+                        contactSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
