@@ -61,7 +61,7 @@
                     <p>私たちは、自分の信じるもののために立ち上がり、行動することでそれぞれの道を切り開く力があると信じています。「DEFOQA」というブランド名は、信念を持って挑戦し続ける皆さんを鼓舞し、支援する私たちの約束です。このブランドを通じて、挑戦を続ける皆さんを応援し、共に挑戦していきます。</p>
                 </div>
                 <div class="about-image">
-                    <img src="sttq5vdgn9.jpg" alt="フィールドのDEFOQAサッカーボール">
+                    <img src="o4ej94dmbw_1.png" alt="DEFOQAサッカーボール">
                 </div>
             </div>
         </div>
@@ -102,31 +102,32 @@
                 <div class="ambassador-grid">
                     <div class="ambassador-card">
                         <div class="ambassador-image">
-                            <img src="j8v99jtykn.jpg" alt="DEFOQAブランドアンバサダー">
+                            <img src="j8v99jtykn.jpg" alt="サラ・ジョンソン - プロフェッショナルサッカー選手">
                         </div>
                         <div class="ambassador-info">
-                            <h3>プロアスリート</h3>
-                            <p>私たちのアンバサダーには、パース・グローリーで活躍したOOOOと、ヤングなでしこ出身のOOOOがいます。二人は現在もNSW NPLでプレーを続けており、オーストラリアと日本の女子サッカーのトップレベルを体現しています。</p>
+                            <h3>サラ・ジョンソン</h3>
+                            <p class="ambassador-title">プロフェッショナルサッカー選手</p>
+                            <p>オーストラリア代表として活躍する女子サッカー選手。卓越した技術と強いリーダーシップで知られています。若い女の子たちにとって、DEFOQAとともに大きなインスピレーションを与えています。</p>
                         </div>
                     </div>
-                    
                     <div class="ambassador-card">
                         <div class="ambassador-image">
-                            <img src="8ynuh9c0tu.jpg" alt="DEFOQAとブランドアンバサダー">
+                            <img src="8ynuh9c0tu.jpg" alt="エミリー・チェン - ジュニアサッカーコーチ">
                         </div>
                         <div class="ambassador-info">
-                            <h3>共通の価値観</h3>
-                            <p>勇気や信念、挑戦し続ける姿勢という私たちのコアバリューを体現し、すべてのレベルの選手が自分の夢に向かって挑戦することを後押ししています。</p>
+                            <h3>エミリー・チェン</h3>
+                            <p class="ambassador-title">ジュニアサッカーコーチ</p>
+                            <p>シドニーでの若い女の子たちのサッカー発展に貢献しているコーチ。彼女の指導哲学は、単なるスキルだけでなく、自信と信念を育てることに重点を置いています。</p>
                         </div>
                     </div>
-                    
                     <div class="ambassador-card">
                         <div class="ambassador-image">
-                            <img src="dszp6ba76j.jpg" alt="DEFOQAでのトレーニング">
+                            <img src="fzrukyb2i3.jpg" alt="リア・パーカー - 地域サッカークラブ創設者">
                         </div>
                         <div class="ambassador-info">
-                            <h3>品質へのパートナーシップ</h3>
-                            <p>私たちは共に、情熱のために立ち上がり、自分自身に挑戦し続ける選手たちに最高品質のサッカーボールを届けることにコミットしています。</p>
+                            <h3>リア・パーカー</h3>
+                            <p class="ambassador-title">地域サッカークラブ創設者</p>
+                            <p>恵まれない環境の子どもたちにサッカーの機会を提供するクラブを設立。DEFOQAのボールを使って、情熱、チームワーク、そして自分の信じるもののために立ち上がる重要性を教えています。</p>
                         </div>
                     </div>
                 </div>
@@ -208,20 +209,23 @@
                 </div>
                 
                 <div class="contact-form-container">
-                    <form class="contact-form">
+                    <form class="contact-form" id="contactFormJp" novalidate>
                         <div class="form-group">
-                            <label for="name">お名前</label>
-                            <input type="text" id="name" name="name" placeholder="お名前" required>
+                            <label for="nameJp">お名前</label>
+                            <input type="text" id="nameJp" name="name" placeholder="お名前" required>
+                            <span class="error-message" id="nameErrorJp"></span>
                         </div>
                         
                         <div class="form-group">
-                            <label for="email">メールアドレス</label>
-                            <input type="email" id="email" name="email" placeholder="メールアドレス" required>
+                            <label for="emailJp">メールアドレス</label>
+                            <input type="email" id="emailJp" name="email" placeholder="メールアドレス" required>
+                            <span class="error-message" id="emailErrorJp"></span>
                         </div>
                         
                         <div class="form-group">
-                            <label for="message">メッセージ</label>
-                            <textarea id="message" name="message" placeholder="メッセージ内容" rows="5" required></textarea>
+                            <label for="messageJp">メッセージ</label>
+                            <textarea id="messageJp" name="message" placeholder="メッセージ内容" rows="5" required></textarea>
+                            <span class="error-message" id="messageErrorJp"></span>
                         </div>
                         
                         <button type="submit" class="btn">送信する</button>
@@ -285,6 +289,68 @@
                         contactSection.scrollIntoView({ behavior: 'smooth' });
                     }
                 });
+            }
+            
+            // Form validation
+            const contactForm = document.getElementById('contactFormJp');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Reset previous error messages
+                    document.getElementById('nameErrorJp').textContent = '';
+                    document.getElementById('emailErrorJp').textContent = '';
+                    document.getElementById('messageErrorJp').textContent = '';
+                    
+                    // Get form fields
+                    const name = document.getElementById('nameJp');
+                    const email = document.getElementById('emailJp');
+                    const message = document.getElementById('messageJp');
+                    
+                    let isValid = true;
+                    
+                    // Validate name
+                    if (!name.value.trim()) {
+                        document.getElementById('nameErrorJp').textContent = 'お名前は必須です';
+                        isValid = false;
+                    }
+                    
+                    // Validate email
+                    if (!email.value.trim()) {
+                        document.getElementById('emailErrorJp').textContent = 'メールアドレスは必須です';
+                        isValid = false;
+                    } else if (!isValidEmail(email.value)) {
+                        document.getElementById('emailErrorJp').textContent = '有効なメールアドレスを入力してください';
+                        isValid = false;
+                    }
+                    
+                    // Validate message
+                    if (!message.value.trim()) {
+                        document.getElementById('messageErrorJp').textContent = 'メッセージは必須です';
+                        isValid = false;
+                    }
+                    
+                    // If form is valid, submit it
+                    if (isValid) {
+                        // Here you would normally send the form data to your server
+                        // For this demo, we'll just log the form data and show a success message
+                        
+                        const formData = new FormData(contactForm);
+                        console.log('フォームが送信されました:', Object.fromEntries(formData));
+                        
+                        // Reset the form
+                        contactForm.reset();
+                        
+                        // Show success message
+                        alert('お問い合わせありがとうございます。近日中にご連絡いたします。');
+                    }
+                });
+            }
+            
+            // Helper function to validate email format
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
             }
         });
     </script>

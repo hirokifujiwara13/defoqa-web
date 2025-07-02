@@ -492,6 +492,26 @@ header {
 
 .form-group {
   margin-bottom: 20px;
+  position: relative;
+}
+
+.form-group .error-message {
+  color: #ff3333;
+  font-size: 0.85rem;
+  position: absolute;
+  bottom: -20px;
+  left: 0;
+  margin-top: 5px;
+}
+
+input:invalid,
+textarea:invalid {
+  border-color: #ff3333;
+}
+
+input:focus:invalid,
+textarea:focus:invalid {
+  outline-color: #ff3333;
 }
 
 .form-group label {
