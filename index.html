@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://www.google.com/recaptcha/api.js?render=6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92"></script>
+    <!-- <script src="https://www.google.com/recaptcha/api.js?render=6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92"></script> -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEFOQA - Take a Stand</title>
@@ -334,13 +334,13 @@
                         submitButton.disabled = true;
 
                         // reCAPTCHAを実行してトークンを取得
-                        grecaptcha.ready(function() {
-                            grecaptcha.execute('6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92', {action: 'submit'}).then(function(token) {
+                        // grecaptcha.ready(function() {
+                        //     grecaptcha.execute('6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92', {action: 'submit'}).then(function(token) {
 
                                 const formData = new FormData(contactForm);
 
                                 // Ensure reCAPTCHA response is included
-                                formData.append('g-recaptcha-response', token);
+                                // formData.append('g-recaptcha-response', token);
                                 
                                 // Send the form data to SSGForm
                                 fetch('https://ssgform.com/s/EfAcQ9tmKgpk', {
@@ -369,8 +369,8 @@
                                     submitButton.textContent = originalText;
                                     submitButton.disabled = false;
                                 });
-                            });
-                        });
+                        //     });
+                        // });
                     }
                 });
             }
