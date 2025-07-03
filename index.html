@@ -340,7 +340,7 @@
                                 const formData = new FormData(contactForm);
 
                                 // Ensure reCAPTCHA response is included
-                                // formData.append('g-recaptcha-response', token);
+                                formData.append('g-recaptcha-response', token);
                                 
                                 // Send the form data to SSGForm
                                 fetch('https://ssgform.com/s/EfAcQ9tmKgpk', {
