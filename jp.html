@@ -228,13 +228,6 @@
                             <span class="error-message" id="messageErrorJp"></span>
                         </div>
                         
-                        <div class="g-recaptcha" 
-                            data-sitekey="6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92"
-                            data-callback="onRecaptchaLoad"
-                            data-error-callback="onRecaptchaError"
-                            data-expired-callback="onRecaptchaExpired">
-                        </div>
-
                         <button id="submit-btn" type="submit" class="btn">送信する</button>
                     </form>
                 </div>
@@ -393,24 +386,6 @@
                 return emailRegex.test(email);
             }
         });
-
-        // reCAPTCHA callback function (optional)
-        function onRecaptchaLoad() {
-            console.log('reCAPTCHA loaded');
-        }
-
-        // reCAPTCHA error callback (optional)
-        function onRecaptchaError() {
-            console.error('reCAPTCHA error');
-            alert('reCAPTCHAでエラーが発生しました。ページを再読み込みしてください。');
-        }
-
-        // Optional: reCAPTCHA expired callback
-        function onRecaptchaExpired() {
-            console.warn('reCAPTCHA expired');
-            alert('reCAPTCHAの有効期限が切れました。もう一度確認してください。');
-        }
     </script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </body>
 </html>
