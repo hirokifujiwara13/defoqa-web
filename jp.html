@@ -227,6 +227,14 @@
                             <span class="error-message" id="messageErrorJp"></span>
                         </div>
                         
+                        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                        <div class="g-recaptcha" 
+                            data-sitekey="6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92"
+                            data-callback="onRecaptchaLoad"
+                            data-error-callback="onRecaptchaError"
+                            data-expired-callback="onRecaptchaExpired">
+                        </div>
+
                         <button type="submit" class="btn">送信する</button>
                     </form>
                 </div>
@@ -305,6 +313,7 @@
                     const name = document.getElementById('nameJp');
                     const email = document.getElementById('emailJp');
                     const message = document.getElementById('messageJp');
+                    const submitButton = contactForm.querySelector('button[type="submit"]');
                     
                     let isValid = true;
                     
@@ -328,20 +337,67 @@
                         document.getElementById('messageErrorJp').textContent = 'メッセージは必須です';
                         isValid = false;
                     }
+
+                    // reCAPTCHA validation
+                    let recaptchaResponse = '';
+                    try {
+                        recaptchaResponse = grecaptcha.getResponse();
+                    } catch (error) {
+                        console.error('reCAPTCHA error:', error);
+                        alert('reCAPTCHAの読み込みに問題があります。ページを再読み込みしてください。');
+                        return;
+                    }
+                    
+                    if (!recaptchaResponse) {
+                        alert('reCAPTCHAを完了してください。');
+                        isValid = false;
+                    }
                     
                     // If form is valid, submit it
                     if (isValid) {
-                        // Here you would normally send the form data to your server
-                        // For this demo, we'll just log the form data and show a success message
-                        
+                        // Show loading state
+                        const originalText = submitButton.textContent;
+                        submitButton.textContent = '送信中...';
+                        submitButton.disabled = true;
+
                         const formData = new FormData(contactForm);
-                        console.log('フォームが送信されました:', Object.fromEntries(formData));
                         
-                        // Reset the form
-                        contactForm.reset();
-                        
-                        // Show success message
-                        alert('お問い合わせありがとうございます。近日中にご連絡いたします。');
+                        // Ensure reCAPTCHA response is included
+                        formData.append('g-recaptcha-response', recaptchaResponse);
+
+                        // Send the form data to SSGForm
+                        fetch('https://ssgform.com/s/yJyerc6YznDx', {
+                            method: 'POST',
+                            body: formData,
+                            mode: 'cors'
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                // Reset the form
+                                contactForm.reset();
+                                // Reset reCAPTCHA
+                                try {
+                                    grecaptcha.reset();
+                                } catch (error) {
+                                    console.error('reCAPTCHA reset error:', error);
+                                }
+                                // Show success message
+                                alert('お問い合わせありがとうございます。近日中にご連絡いたします。');
+                                // Hide contact section
+                                contactSection.style.display = 'none';
+                            } else {
+                                throw new Error('フォームの送信に失敗しました。');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('お問い合わせの送信中にエラーが発生しました。後ほど再度お試しください。');
+                        })
+                        .finally(() => {
+                            // Reset button state
+                            submitButton.textContent = originalText;
+                            submitButton.disabled = false;
+                        });
                     }
                 });
             }
@@ -352,6 +408,23 @@
                 return emailRegex.test(email);
             }
         });
+
+        // reCAPTCHA callback function (optional)
+        function onRecaptchaLoad() {
+            console.log('reCAPTCHA loaded');
+        }
+
+        // reCAPTCHA error callback (optional)
+        function onRecaptchaError() {
+            console.error('reCAPTCHA error');
+            alert('reCAPTCHAでエラーが発生しました。ページを再読み込みしてください。');
+        }
+
+        // Optional: reCAPTCHA expired callback
+        function onRecaptchaExpired() {
+            console.warn('reCAPTCHA expired');
+            alert('reCAPTCHAの有効期限が切れました。もう一度確認してください。');
+        }
     </script>
 </body>
 </html>

@@ -221,6 +221,14 @@
                             <textarea id="message" name="message" placeholder="Your message" rows="5" required></textarea>
                             <span class="error-message" id="messageError"></span>
                         </div>
+
+                        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                        <div class="g-recaptcha" 
+                            data-sitekey="6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92"
+                            data-callback="onRecaptchaLoad"
+                            data-error-callback="onRecaptchaError"
+                            data-expired-callback="onRecaptchaExpired">
+                        </div>
                         
                         <button type="submit" class="btn">Send Message</button>
                     </form>
@@ -300,6 +308,7 @@
                     const name = document.getElementById('name');
                     const email = document.getElementById('email');
                     const message = document.getElementById('message');
+                    const submitButton = contactForm.querySelector('button[type="submit"]');
                     
                     let isValid = true;
                     
@@ -323,20 +332,67 @@
                         document.getElementById('messageError').textContent = 'Message is required';
                         isValid = false;
                     }
+
+                    // reCAPTCHA validation
+                    let recaptchaResponse = '';
+                    try {
+                        recaptchaResponse = grecaptcha.getResponse();
+                    } catch (error) {
+                        console.error('reCAPTCHA error:', error);
+                        alert('There is a problem loading reCAPTCHA. Please reload the page.');
+                        return;
+                    }
+                    
+                    if (!recaptchaResponse) {
+                        alert('Please complete the reCAPTCHA verification.')
+                        isValid = false;
+                    }
                     
                     // If form is valid, submit it
                     if (isValid) {
-                        // Here you would normally send the form data to your server
-                        // For this demo, we'll just log the form data and show a success message
-                        
+                        // Show loading state
+                        const originalText = submitButton.textContent;
+                        submitButton.textContent = 'Sending...';
+                        submitButton.disabled = true;
+
                         const formData = new FormData(contactForm);
-                        console.log('Form submitted with:', Object.fromEntries(formData));
+
+                        // Ensure reCAPTCHA response is included
+                        formData.append('g-recaptcha-response', recaptchaResponse);
                         
-                        // Reset the form
-                        contactForm.reset();
-                        
-                        // Show success message
-                        alert('Thank you for your message! We will get back to you soon.');
+                        // Send the form data to SSGForm
+                        fetch('https://ssgform.com/s/EfAcQ9tmKgpk', {
+                            method: 'POST',
+                            body: formData,
+                            mode: 'cors'
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                // Reset the form
+                                contactForm.reset();
+                                // Reset reCAPTCHA
+                                try {
+                                    grecaptcha.reset();
+                                } catch (error) {
+                                    console.error('reCAPTCHA reset error:', error);
+                                }
+                                // Show success message
+                                alert('Thank you for your message! We will get back to you soon.');
+                                // Hide contact section
+                                contactSection.style.display = 'none';
+                            } else {
+                                throw new Error('Failed to submit the form');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Sorry, there was an error submitting your message. Please try again later.');
+                        })
+                        .finally(() => {
+                            // Reset button state
+                            submitButton.textContent = originalText;
+                            submitButton.disabled = false;
+                        });
                     }
                 });
             }
@@ -347,6 +403,23 @@
                 return emailRegex.test(email);
             }
         });
+
+        // reCAPTCHA callback function (optional)
+        function onRecaptchaLoad() {
+            console.log('reCAPTCHA loaded');
+        }
+
+        // reCAPTCHA error callback (optional)
+        function onRecaptchaError() {
+            console.error('reCAPTCHA error');
+            alert('An error occurred with reCAPTCHA. Please reload the page.');
+        }
+
+        // Optional: reCAPTCHA expired callback
+        function onRecaptchaExpired() {
+            console.warn('reCAPTCHA expired');
+            alert('reCAPTCHA has expired. Please verify again.');
+        }
     </script>
 </body>
 </html>
