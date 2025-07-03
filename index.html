@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- <script src="https://www.google.com/recaptcha/api.js?render=6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92"></script> -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEFOQA - Take a Stand</title>
@@ -334,8 +334,8 @@
                         submitButton.disabled = true;
 
                         // reCAPTCHAを実行してトークンを取得
-                        // grecaptcha.ready(function() {
-                        //     grecaptcha.execute('6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92', {action: 'submit'}).then(function(token) {
+                        grecaptcha.ready(function() {
+                            grecaptcha.execute('6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92', {action: 'submit'}).then(function(token) {
 
                                 const formData = new FormData(contactForm);
 
@@ -347,12 +347,9 @@
                                     method: 'POST',
                                     mode: 'cors',
                                     headers: {
-                                        // SSGFormがJSON形式を要求する場合に備えてContent-Typeを明示
-                                        'Content-Type': 'application/json',
-                                        // AJAXリクエストであることを示すためにAcceptヘッダーを追加
-                                        'Accept': 'application/json' 
+                                        'X-Requested-With': 'XMLHttpRequest',
                                     },
-                                    body: JSON.stringify(Object.fromEntries(formData)),
+                                    body: formData,
                                 })
                                 .then(response => {
                                     if (response.ok) {
@@ -375,8 +372,8 @@
                                     submitButton.textContent = originalText;
                                     submitButton.disabled = false;
                                 });
-                        //     });
-                        // });
+                            });
+                        });
                     }
                 });
             }

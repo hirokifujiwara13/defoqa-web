@@ -350,8 +350,11 @@
                                 // Send the form data to SSGForm
                                 fetch('https://ssgform.com/s/yJyerc6YznDx', {
                                     method: 'POST',
+                                    mode: 'cors',
+                                    headers: {
+                                        'X-Requested-With': 'XMLHttpRequest',
+                                    },
                                     body: formData,
-                                    mode: 'cors'
                                 })
                                 .then(response => {
                                     if (response.ok) {
