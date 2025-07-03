@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEFOQA - 信念のために立ち上がる</title>
@@ -234,7 +235,7 @@
                             data-expired-callback="onRecaptchaExpired">
                         </div>
 
-                        <button type="submit" class="btn">送信する</button>
+                        <button id="submit-btn" type="submit" class="btn">送信する</button>
                     </form>
                 </div>
             </div>
@@ -312,7 +313,7 @@
                     const name = document.getElementById('nameJp');
                     const email = document.getElementById('emailJp');
                     const message = document.getElementById('messageJp');
-                    const submitButton = contactForm.querySelector('button[type="submit"]');
+                    const submitButton = document.getElementById('submit-btn');
                     
                     let isValid = true;
                     
@@ -337,21 +338,6 @@
                         isValid = false;
                     }
 
-                    // reCAPTCHA validation
-                    let recaptchaResponse = '';
-                    try {
-                        recaptchaResponse = grecaptcha.getResponse();
-                    } catch (error) {
-                        console.error('reCAPTCHA error:', error);
-                        alert('reCAPTCHAの読み込みに問題があります。ページを再読み込みしてください。');
-                        return;
-                    }
-                    
-                    if (!recaptchaResponse) {
-                        alert('reCAPTCHAを完了してください。');
-                        isValid = false;
-                    }
-                    
                     // If form is valid, submit it
                     if (isValid) {
                         // Show loading state
@@ -359,43 +345,43 @@
                         submitButton.textContent = '送信中...';
                         submitButton.disabled = true;
 
-                        const formData = new FormData(contactForm);
-                        
-                        // Ensure reCAPTCHA response is included
-                        formData.append('g-recaptcha-response', recaptchaResponse);
+                        // reCAPTCHAを実行してトークンを取得
+                        grecaptcha.ready(function() {
+                            grecaptcha.execute('6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92', {action: 'submit'}).then(function(token) {
+                                
+                                const formData = new FormData(contactForm);
+                                
+                                // Ensure reCAPTCHA response is included
+                                formData.append('g-recaptcha-response', token);
 
-                        // Send the form data to SSGForm
-                        fetch('https://ssgform.com/s/yJyerc6YznDx', {
-                            method: 'POST',
-                            body: formData,
-                            mode: 'cors'
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                // Reset the form
-                                contactForm.reset();
-                                // Reset reCAPTCHA
-                                try {
-                                    grecaptcha.reset();
-                                } catch (error) {
-                                    console.error('reCAPTCHA reset error:', error);
-                                }
-                                // Show success message
-                                alert('お問い合わせありがとうございます。近日中にご連絡いたします。');
-                                // Hide contact section
-                                contactSection.style.display = 'none';
-                            } else {
-                                throw new Error('フォームの送信に失敗しました。');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            alert('お問い合わせの送信中にエラーが発生しました。後ほど再度お試しください。');
-                        })
-                        .finally(() => {
-                            // Reset button state
-                            submitButton.textContent = originalText;
-                            submitButton.disabled = false;
+                                // Send the form data to SSGForm
+                                fetch('https://ssgform.com/s/yJyerc6YznDx', {
+                                    method: 'POST',
+                                    body: formData,
+                                    mode: 'cors'
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        // Reset the form
+                                        contactForm.reset();
+                                        // Show success message
+                                        alert('お問い合わせありがとうございます。近日中にご連絡いたします。');
+                                        // Hide contact section
+                                        contactSection.style.display = 'none';
+                                    } else {
+                                        throw new Error('フォームの送信に失敗しました。');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error:', error);
+                                    alert('お問い合わせの送信中にエラーが発生しました。後ほど再度お試しください。');
+                                })
+                                .finally(() => {
+                                    // Reset button state
+                                    submitButton.textContent = originalText;
+                                    submitButton.disabled = false;
+                                });
+                            });
                         });
                     }
                 });
