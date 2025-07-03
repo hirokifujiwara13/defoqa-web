@@ -345,8 +345,14 @@
                                 // Send the form data to SSGForm
                                 fetch('https://ssgform.com/s/EfAcQ9tmKgpk', {
                                     method: 'POST',
-                                    body: formData,
-                                    mode: 'cors'
+                                    mode: 'cors',
+                                    headers: {
+                                        // SSGFormがJSON形式を要求する場合に備えてContent-Typeを明示
+                                        'Content-Type': 'application/json',
+                                        // AJAXリクエストであることを示すためにAcceptヘッダーを追加
+                                        'Accept': 'application/json' 
+                                    },
+                                    body: JSON.stringify(Object.fromEntries(formData)),
                                 })
                                 .then(response => {
                                     if (response.ok) {
