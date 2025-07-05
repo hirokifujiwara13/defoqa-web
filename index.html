@@ -337,10 +337,15 @@
                         grecaptcha.ready(function() {
                             grecaptcha.execute('6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92', {action: 'submit'}).then(function(token) {
 
-                                const formData = new FormData(contactForm);
+                                // const formData = new FormData(contactForm);
+                                const formData = new FormData();
 
                                 // Ensure reCAPTCHA response is included
                                 formData.append('g-recaptcha-response', token);
+                                // Append form data
+                                formData.append('お名前', name.value.trim());
+                                formData.append('メールアドレス', email.value.trim());
+                                formData.append('お問い合わせ内容', message.value.trim());
 
                                 // XMLHttpRequest (XHR) を使って送信する
                                 const xhr = new XMLHttpRequest();
