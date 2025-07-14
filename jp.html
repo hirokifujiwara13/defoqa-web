@@ -342,22 +342,19 @@
                         grecaptcha.ready(function() {
                             grecaptcha.execute('6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92', {action: 'submit'}).then(function(token) {
                                 
-                                // Prepare form data for Lambda API
-                                const formData = {
-                                    name: name.value.trim(),
-                                    email: email.value.trim(),
-                                    message: message.value.trim(),
-                                    language: 'Japanese',
-                                    recaptchaToken: token
-                                };
-
-                                // Submit to Lambda API Gateway using fetch
+                                // Try using FormData to avoid preflight
+                                const submitData = new FormData();
+                                submitData.append('name', name.value.trim());
+                                submitData.append('email', email.value.trim());
+                                submitData.append('message', message.value.trim());
+                                submitData.append('language', 'Japanese');
+                                submitData.append('recaptchaToken', token);
+                                
+                                // Submit to Lambda API Gateway using fetch (no Content-Type = no preflight)
                                 fetch('https://q1pouxk32d.execute-api.ap-southeast-2.amazonaws.com/default/postDefoqaContactFormok', {
                                     method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify(formData)
+                                    mode: 'cors',
+                                    body: submitData  // FormData automatically sets correct Content-Type
                                 })
                                 .then(response => {
                                     if (response.ok) {

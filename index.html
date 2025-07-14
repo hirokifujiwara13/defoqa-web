@@ -346,13 +346,25 @@
                                     recaptchaToken: token
                                 };
 
-                                // Submit to Lambda API Gateway using fetch
+                                // Debug: Log the request data
+                                console.log('About to send request:', formData);
+                                console.log('Current origin:', window.location.origin);
+                                console.log('Current href:', window.location.href);
+                                console.log('Current hostname:', window.location.hostname);
+                                
+                                // Try using FormData to avoid preflight
+                                const submitData = new FormData();
+                                submitData.append('name', formData.name);
+                                submitData.append('email', formData.email);
+                                submitData.append('message', formData.message);
+                                submitData.append('language', formData.language);
+                                submitData.append('recaptchaToken', formData.recaptchaToken);
+                                
+                                // Submit to Lambda API Gateway using fetch (no Content-Type = no preflight)
                                 fetch('https://q1pouxk32d.execute-api.ap-southeast-2.amazonaws.com/default/postDefoqaContactFormok', {
                                     method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify(formData)
+                                    mode: 'cors',
+                                    body: submitData  // FormData automatically sets correct Content-Type
                                 })
                                 .then(response => {
                                     if (response.ok) {
