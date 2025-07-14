@@ -342,23 +342,18 @@
                         grecaptcha.ready(function() {
                             grecaptcha.execute('6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92', {action: 'submit'}).then(function(token) {
                                 
-                                // Prepare form data for Lambda API
-                                const formData = {
-                                    name: name.value.trim(),
-                                    email: email.value.trim(),
-                                    message: message.value.trim(),
-                                    language: 'Japanese',
-                                    recaptchaToken: token
-                                };
-
+                                // Use FormData to avoid preflight
+                                const submitData = new FormData();
+                                submitData.append('name', name.value.trim());
+                                submitData.append('email', email.value.trim());
+                                submitData.append('message', message.value.trim());
+                                submitData.append('language', 'Japanese');
+                                submitData.append('recaptchaToken', token);
+                                
                                 // Submit to Lambda API Gateway using fetch
                                 fetch('https://q1pouxk32d.execute-api.ap-southeast-2.amazonaws.com/default/postDefoqaContactFormok', {
                                     method: 'POST',
-                                    mode: 'cors',
-                                    headers: {
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify(formData)
+                                    body: submitData  // No headers needed - browser sets them automatically
                                 })
                                 .then(response => {
                                     if (response.ok) {
