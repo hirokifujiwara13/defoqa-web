@@ -27,7 +27,7 @@
                 <li><a href="#products">製品</a></li>
                 <li><a href="#ambassadors">アンバサダー</a></li>
                 <li><a href="#mission">ミッション</a></li>
-                <!-- <li><a href="#cta">お問い合わせ</a></li> -->
+                <li><a href="#cta">お問い合わせ</a></li>
                 <li><a href="/">English</a></li>
             </ul>
             <div class="mobile-lang-switch">
@@ -191,7 +191,7 @@
         <div class="container">
             <h2>DEFOQAと共に立ち上がる</h2>
             <p>オーストラリア全土のプレイヤーに品質の高いサッカーボールを届けるという私たちのミッションに参加しませんか。あなたの情熱のために立ち上がりましょう。</p>
-            <!-- <a href="mailto:info@defoqa.com" class="btn">お問い合わせ</a> -->
+            <a href="#" class="btn">お問い合わせ</a>
         </div>
     </section>
 
@@ -338,39 +338,45 @@
                         submitButton.textContent = '送信中...';
                         submitButton.disabled = true;
 
-                        // reCAPTCHAを実行してトークンを取得
+                        // Execute reCAPTCHA and submit to Lambda API
                         grecaptcha.ready(function() {
                             grecaptcha.execute('6Lf8OnYrAAAAAFCdEMR-q8479evh5r4Lkv-TS_92', {action: 'submit'}).then(function(token) {
                                 
-                                const formData = new FormData(contactForm);
-                                
-                                // Ensure reCAPTCHA response is included
-                                formData.append('g-recaptcha-response', token);
+                                // Prepare form data for Lambda API
+                                const formData = {
+                                    name: name.value.trim(),
+                                    email: email.value.trim(),
+                                    message: message.value.trim(),
+                                    language: 'Japanese',
+                                    recaptchaToken: token
+                                };
 
-                                // Send the form data to SSGForm
-                                fetch('https://ssgform.com/s/yJyerc6YznDx', {
+                                // Submit to Lambda API Gateway using fetch
+                                fetch('https://q1pouxk32d.execute-api.ap-southeast-2.amazonaws.com/default/postDefoqaContactFormok', {
                                     method: 'POST',
-                                    mode: 'cors',
                                     headers: {
-                                        'X-Requested-With': 'XMLHttpRequest',
+                                        'Content-Type': 'application/json'
                                     },
-                                    body: formData,
+                                    body: JSON.stringify(formData)
                                 })
                                 .then(response => {
                                     if (response.ok) {
-                                        // Reset the form
-                                        contactForm.reset();
-                                        // Show success message
-                                        alert('お問い合わせありがとうございます。近日中にご連絡いたします。');
-                                        // Hide contact section
-                                        contactSection.style.display = 'none';
+                                        return response.json();
                                     } else {
-                                        throw new Error('フォームの送信に失敗しました。');
+                                        return response.json().then(errorData => {
+                                            throw new Error(errorData.error || 'フォームの送信に失敗しました。');
+                                        });
                                     }
+                                })
+                                .then(data => {
+                                    // Success
+                                    contactForm.reset();
+                                    alert('お問い合わせありがとうございます。近日中にご連絡いたします。');
+                                    contactSection.style.display = 'none';
                                 })
                                 .catch(error => {
                                     console.error('Error:', error);
-                                    alert('お問い合わせの送信中にエラーが発生しました。後ほど再度お試しください。');
+                                    alert('お問い合わせの送信中にエラーが発生しました: ' + error.message);
                                 })
                                 .finally(() => {
                                     // Reset button state
