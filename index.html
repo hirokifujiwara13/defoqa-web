@@ -352,19 +352,14 @@
                                 console.log('Current href:', window.location.href);
                                 console.log('Current hostname:', window.location.hostname);
                                 
-                                // Try using FormData to avoid preflight
-                                const submitData = new FormData();
-                                submitData.append('name', formData.name);
-                                submitData.append('email', formData.email);
-                                submitData.append('message', formData.message);
-                                submitData.append('language', formData.language);
-                                submitData.append('recaptchaToken', formData.recaptchaToken);
-                                
-                                // Submit to Lambda API Gateway using fetch (no Content-Type = no preflight)
+                                // Submit to Lambda API Gateway using fetch
                                 fetch('https://q1pouxk32d.execute-api.ap-southeast-2.amazonaws.com/default/postDefoqaContactFormok', {
                                     method: 'POST',
                                     mode: 'cors',
-                                    body: submitData  // FormData automatically sets correct Content-Type
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(formData)
                                 })
                                 .then(response => {
                                     if (response.ok) {
